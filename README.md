@@ -1,3 +1,8 @@
+> **⚠️ WARNING & DISCLAIMER:**
+> The following instructions involve making changes to your website's code and database. If you are not a technical expert, proceeding with these changes carries a risk. **A mistake could result in your website breaking, going offline, or permanent damage to your database.**
+>
+> **CRITICAL STEP:** Before applying ANY changes, please ensure you have a **FULL BACKUP** of your website files and your database. Proceed with caution.
+
 # Technical SEO Fixes for Texas Neurology
 
 This document outlines the steps required to fix technical SEO issues identified in the Ahrefs audit for [https://texasneurology.com/index.asp](https://texasneurology.com/index.asp).
