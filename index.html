@@ -41,12 +41,42 @@
                 margin-left: -280px;
                 transition: margin .25s ease-out;
             }
-            #sidebar-wrapper.toggled {
+            #wrapper.toggled #sidebar-wrapper {
                 margin-left: 0;
             }
             #page-content-wrapper {
                 margin-left: 0;
                 width: 100%;
+                padding-top: 70px; /* Space for fixed header */
+            }
+            
+            /* Fixed Mobile Header */
+            #page-content-wrapper .navbar {
+                position: fixed;
+                top: 0;
+                left: 0;
+                right: 0;
+                z-index: 990;
+                background-color: #fff !important;
+                box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+                padding: 10px 20px !important;
+            }
+
+            /* Overlay effect when menu is open */
+            #wrapper.toggled #page-content-wrapper::before {
+                content: "";
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background: rgba(0,0,0,0.5);
+                z-index: 999;
+            }
+
+            /* Add scroll offset for headings to prevent them from being hidden behind fixed header */
+            #content h1, #content h2, #content h3 {
+                scroll-margin-top: 80px;
             }
         }
 
@@ -70,8 +100,11 @@
     <div class="d-flex" id="wrapper">
         <!-- Sidebar -->
         <div id="sidebar-wrapper">
-            <div class="sidebar-heading text-center py-4 primary-text fs-4 fw-bold text-uppercase border-bottom">
+            <div class="sidebar-heading text-center py-4 primary-text fs-4 fw-bold text-uppercase border-bottom position-relative">
                 <i class="fas fa-tools me-2"></i>SEO Guide
+                <button class="btn btn-link text-dark d-md-none position-absolute top-50 end-0 translate-middle-y me-3" id="menu-close">
+                    <i class="fas fa-times fa-lg"></i>
+                </button>
             </div>
             <div class="list-group list-group-flush my-3" id="toc-menu">
                 <!-- Menu items will be injected here -->
@@ -82,7 +115,7 @@
         <div id="page-content-wrapper">
             <nav class="navbar navbar-expand-lg navbar-light bg-transparent py-4 px-4 d-md-none">
                 <div class="d-flex align-items-center">
-                    <button class="btn btn-primary" id="menu-toggle">Toggle Menu</button>
+                    <button class="btn btn-primary" id="menu-toggle"><i class="fas fa-bars me-2"></i>SEO Guide</button>
                 </div>
             </nav>
 
@@ -101,12 +134,25 @@
     
     <script>
         // Toggle menu script
-        var el = document.getElementById("wrapper");
+        var wrapper = document.getElementById("wrapper");
         var toggleButton = document.getElementById("menu-toggle");
+        var closeButton = document.getElementById("menu-close");
 
-        toggleButton.onclick = function () {
-            el.classList.toggle("toggled");
+        function toggleMenu() {
+            wrapper.classList.toggle("toggled");
+        }
+
+        toggleButton.onclick = function (e) {
+            e.preventDefault();
+            toggleMenu();
         };
+
+        if (closeButton) {
+            closeButton.onclick = function (e) {
+                e.preventDefault();
+                toggleMenu();
+            };
+        }
 
         // Fetch and render Markdown
         fetch('README.md')
@@ -146,6 +192,13 @@
                 if (header.tagName === 'H1') link.classList.add('toc-h1');
                 if (header.tagName === 'H2') link.classList.add('toc-h2');
                 if (header.tagName === 'H3') link.classList.add('toc-h3');
+
+                // Close menu when clicking a link on mobile
+                link.addEventListener('click', () => {
+                    if (window.innerWidth <= 768 && wrapper.classList.contains('toggled')) {
+                        toggleMenu();
+                    }
+                });
 
                 tocMenu.appendChild(link);
             });
