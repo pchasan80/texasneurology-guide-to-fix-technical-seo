@@ -5,7 +5,7 @@
 
 # Technical SEO Fixes for Texas Neurology
 
-This document outlines the steps required to fix technical SEO issues identified in the Ahrefs audit for [https://texasneurology.com/index.asp](https://texasneurology.com/index.asp).
+This document outlines the steps required to fix technical SEO issues identified in [https://texasneurology.com/index.asp](https://texasneurology.com/index.asp).
 
 ## Issue 1: HTTPS page has internal links to HTTP
 
@@ -54,3 +54,34 @@ You need to update all internal links to use the `https://` protocol instead of 
     </rewrite>
     ```
     *(Note: This requires the IIS URL Rewrite module to be installed on the server).*
+
+## Issue 2: Missing Alt Text
+
+**Problem:**
+Images on the website are missing the `alt` attribute. Search engines like Google cannot "see" images; they rely on the `alt` text to understand what the image is about. Missing alt text hurts your ranking in image search and makes the site inaccessible to visually impaired users using screen readers.
+
+**Solution:**
+Add a descriptive `alt` attribute to every image tag.
+
+### Steps to Fix:
+
+1.  **Identify Missing Alt Text:**
+    *   Refer to the "Images" section of your Ahrefs report to see a list of image URLs that are missing alt text and the pages they appear on.
+
+2.  **Update Standard HTML Images:**
+    *   Locate `<img>` tags in your `.asp`, `.aspx`, or `.html` files.
+    *   Add the `alt="Description"` attribute.
+    *   *Bad:* `<img src="neurology-clinic.jpg">`
+    *   *Good:* `<img src="neurology-clinic.jpg" alt="Front entrance of Texas Neurology clinic">`
+
+3.  **Update ASP.NET Image Controls:**
+    *   If your site uses ASP.NET server controls, look for `<asp:Image>` tags.
+    *   Add the `AlternateText` property.
+    *   *Example:*
+        ```asp
+        <asp:Image ID="Image1" runat="server" ImageUrl="~/images/doctor.jpg" AlternateText="Dr. Smith consulting with a patient" />
+        ```
+
+4.  **Decorative Images:**
+    *   If an image is purely for design (like a spacer or background pattern) and conveys no meaning, use an empty alt attribute: `alt=""`. This tells search engines to ignore it.
+
